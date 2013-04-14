@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	backgroundAlpha="0.7" backgroundColor="black" width="135" height="85"
+	cornerRadius="5" borderThickness="0" borderStyle="solid"
+	mouseChildren="false" mouseEnabled="false"
+	creationComplete="init();">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.events.FlexEvent;
+			import com.models.Model;
+			import com.utils.StringUtil;
+		
+			import com.utils.StringUtil;
+			import mx.events.PropertyChangeEvent;
+			import com.Constants;
+			import caurina.transitions.Tweener;
+			import com.models.CoordModel;
+			import mx.binding.utils.ChangeWatcher;
+			import com.controllers.ApplicationController;
+			
+			[Bindable]
+			public var coordModel:CoordModel;
+			
+			[Bindable]
+			private var tip:String = "";
+			
+			[Bindable]
+			private var myTip:String = "";
+			
+			[Bindable]
+			public var mode:String = Constants.TOOLTIP_MODE_LOCATION;
+			
+			private function init():void
+			{
+				ChangeWatcher.watch(this, "coordModel", updateModel);
+				ChangeWatcher.watch(this, "visible", updateMyTip);
+			}
+			
+			private function updateModel(e:PropertyChangeEvent):void
+			{
+				tip = "Station: <br/><b>" + coordModel.name + "</b><br/>";
+				
+				var startDate:Date = ApplicationController.SINGLETON.model.startDate;
+				var startDateMs:Number = Date.UTC(startDate.fullYearUTC, startDate.monthUTC, startDate.dateUTC, startDate.hoursUTC, startDate.minutesUTC);
+				var date:Date = new Date(coordModel.time + startDateMs);
+				var y:Number = date.fullYearUTC;
+				var m:Number = date.monthUTC + 1;
+				var month:String = StringUtil.getMonthString(m);
+				var d:String = StringUtil.formatDoubleDigits(date.date);
+				var h:String = StringUtil.formatDoubleDigits(date.hours);
+				var min:String = StringUtil.formatDoubleDigits(date.minutesUTC);
+				var dateStr:String = month + " " + d + ", " + y;
+				tip += "Arrival: <br/>" +  dateStr  + "<br/>";
+				tip += h + ":" + min;
+			}
+			
+			private function updateMyTip(e:FlexEvent):void
+			{
+				if(this.visible){
+					var model:Model = Model.getInstance();
+					myTip = "<b>This is me!</b><br/>";
+					myTip += "Destination: <b>" + model.coordinates[model.toStationIndex].name + "</b><br/>";
+					
+					var y:Number = model.startDate.fullYearUTC;
+					var m:String = StringUtil.getMonthString(model.startDate.monthUTC+1);
+					var d:String = StringUtil.formatDoubleDigits(model.startDate.dateUTC-1);
+					myTip += "Start Date: <br/>" + m + " " + d + ", " + y;
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Text x="5" y="5" width="{this.width-5}" height="{this.height-5}" 
+		fontSize="10" color="white" htmlText="{tip}" visible="{this.mode == Constants.TOOLTIP_MODE_LOCATION}"/>
+		
+	<mx:Text x="5" y="5" width="{this.width-5}" height="{this.height-5}" 
+		fontSize="10" color="white" htmlText="{myTip}" visible="{this.mode == Constants.TOOLTIP_MODE_ME}"/>
+	
+</mx:Canvas>

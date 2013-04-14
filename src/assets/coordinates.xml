@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--dates are only used to calculate the time it takes to get to the station
+*** relative to the baseDate
+-->
+
+ <coordinates>
+ 	
+	<map>assets/images/map.jpg</map>
+	<baseDate>2009/9/3/22/0</baseDate>
+	
+	<point>
+		<name>Toronto</name>
+		<date>2009/9/3/22/0</date>
+		<pos>700/300</pos>
+		<picture>
+			<url>assets/photos/toronto1.jpg</url>
+			<caption>Shot from Toronto Island</caption>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Sudbury Junction</name>
+		<date>2009/9/4/5/13</date>
+		<pos>655/265</pos>
+		<picture>
+			<url>assets/photos/sudbury1.jpg</url>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Hornepayne</name>
+		<date>2009/9/4/15/15</date>
+		<pos>536/204</pos>
+		<picture>
+			<url>assets/photos/hornepayne1.jpg</url>
+			<caption>Rolling into the town of Hornepayne</caption>
+		</picture>
+		<picture>
+			<url>assets/photos/hornepayne2.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/hornepayne3.jpg</url>
+			<caption>We just doubled their population</caption>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Sioux Lookout</name>
+		<date>2009/9/5/0/56</date>
+		<pos>475/220</pos>
+		<picture>
+			<url>assets/photos/sioux1.jpg</url>
+			<caption>Wonderbread man!</caption>
+		</picture>
+		<picture>
+			<url>assets/photos/sioux2.jpg</url>
+			<caption>This dude made day 1 seemed much more interesting</caption>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Winnipeg</name>
+		<date>2009/9/5/8/1</date>
+		<pos>385/230</pos>
+		<picture>
+			<url>assets/photos/winnipeg1.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/winnipeg2.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/winnipeg3.jpg</url>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Saskatoon</name>
+		<date>2009/9/5/22/22</date>
+		<pos>270/178</pos>
+		<picture>
+			<url>assets/photos/saskatoon1.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/saskatoon2.jpg</url>
+			<caption>Melville, Saskatoon, same thing.</caption>
+		</picture>
+		<picture>
+			<url>assets/photos/saskatoon3.jpg</url>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Edmonton</name>
+		<date>2009/9/6/6/37</date>
+		<pos>198/144</pos>
+		<picture>
+			<url>assets/photos/edmonton1.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/edmonton2.jpg</url>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Jasper</name>
+		<date>2009/9/6/13/0</date>
+		<pos>144/148</pos>
+		<picture>
+			<url>assets/photos/jasper1.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/jasper2.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/jasper3.jpg</url>
+		</picture>
+		<picture>
+			<url>assets/photos/jasper4.jpg</url>
+		</picture>
+	</point>
+	
+	<point>
+		<name>Kamloops</name>
+		<date>2009/9/6/23/9</date>
+		<pos>102/180</pos>
+	</point>
+	
+	<point>
+		<name>Vancouver</name>
+		<date>2009/9/7/9/42</date>
+		<pos>54/198</pos>
+	</point>
+	
+</coordinates>

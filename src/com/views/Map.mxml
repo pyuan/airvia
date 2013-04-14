@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	horizontalScrollPolicy="off" verticalScrollPolicy="off" 
+	creationComplete="init();" buttonMode="true"
+	xmlns:views="com.views.*">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import com.controllers.ApplicationController;
+			
+			private function init():void
+			{
+				this.addEventListener(MouseEvent.MOUSE_DOWN, ApplicationController.SINGLETON.startMoveMap);
+				this.addEventListener(MouseEvent.MOUSE_UP, ApplicationController.SINGLETON.stopMoveMap);
+				this.addEventListener(MouseEvent.MOUSE_OUT, ApplicationController.SINGLETON.stopMoveMap);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Image id="map"/>
+	
+	<mx:Canvas id="dotsCanvas" width="100%" height="100%" 
+		dropShadowColor="black" dropShadowEnabled="true" shadowDirection="right" shadowDistance="1"
+		horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
+		
+	<mx:Canvas id="myDot" width="100%" height="100%"
+		horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
+		
+	<views:ViaTooltip id="viaTip" visible="false"/>
+	
+	<views:PictureViewer id="pictureViewer" visible="false"/>
+	
+</mx:Canvas>

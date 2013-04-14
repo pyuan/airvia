@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="400" height="310" 
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	backgroundColor="black" backgroundAlpha="0.85"
+	cornerRadius="15" borderStyle="solid" borderThickness="0"
+	shadowDirection="right" shadowDistance="1" dropShadowColor="black" dropShadowEnabled="true">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import com.models.Model;
+			import mx.collections.ArrayCollection;
+			import mx.controls.DateChooser;
+			import com.utils.StringUtil;
+			import com.controllers.ApplicationController;
+			
+			[Bindable]
+			private var hours:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			private var minutes:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			private var stations:ArrayCollection = new ArrayCollection();
+			
+			private var selectedDate:Date;
+			
+			private var selectedHour:String = "";
+			
+			private var selectedMinute:String = "";
+			
+			private var fromStation:int = 0;
+			
+			private var toStation:int = 0;
+			
+			public function init():void
+			{
+				//populate hours
+				hours.removeAll();
+				for(var i:int=0; i<24; i++){
+					var hour:String = StringUtil.formatDoubleDigits(i);
+					hours.addItem(hour);
+				}
+				
+				//populate minutes
+				minutes.removeAll();
+				for(i=0; i<60; i++){
+					var minute:String = StringUtil.formatDoubleDigits(i);
+					minutes.addItem(minute);
+				}
+				
+				//populate stations
+				stations.removeAll();
+				var model:Model = Model.getInstance();
+				for(i=0; i<model.coordinates.length; i++){
+					var station:String = model.coordinates[i].name;
+					stations.addItem(station);
+				}
+				
+				selectDefault();
+			}
+			
+			private function onDateSelected(e:Event):void
+			{
+				selectedDate = DateChooser(e.currentTarget).selectedDate;
+				trace("Start date selected: " + selectedDate);
+			}
+			
+			private function onHourSelected(e:Event):void
+			{
+				selectedHour = ComboBox(e.currentTarget).selectedLabel;
+				trace("Start hour selected: " + selectedHour);
+			}
+			
+			private function onMinuteSelected(e:Event):void
+			{
+				selectedMinute = ComboBox(e.currentTarget).selectedLabel;
+				trace("Start minute selected: " + selectedMinute);
+			}
+			
+			private function onFromSelected(e:Event):void
+			{
+				fromStation = ComboBox(e.currentTarget).selectedIndex;
+				trace("From: " + fromStation + "|" + stations[fromStation]);
+			}
+			
+			private function onToSelected(e:Event):void
+			{
+				toStation = ComboBox(e.currentTarget).selectedIndex;
+				trace("To: " + toStation + "|" + stations[toStation]);
+			}
+			
+			private function selectDefault():void
+			{
+				var model:Model = Model.getInstance();
+				var date:Date = model.baseDate;
+				
+				datePicker.selectedDate = date;
+				selectedDate = new Date(date.fullYearUTC, date.monthUTC, date.dateUTC-1);
+				
+				comboHour.selectedIndex = 22;
+				selectedHour = comboHour.selectedLabel;
+				comboMinute.selectedIndex = 0;	
+				selectedMinute = comboMinute.selectedLabel;
+				
+				comboFrom.selectedIndex = 0;
+				fromStation = comboFrom.selectedIndex;
+				comboTo.selectedIndex = stations.length-1;
+				toStation = comboTo.selectedIndex;
+			}
+			
+			private function choose():void
+			{
+				var y:Number = selectedDate.fullYearUTC;
+				var m:Number = selectedDate.monthUTC;
+				var d:Number = selectedDate.dateUTC;
+				var date:Date = new Date(y, m, d, Number(selectedHour), Number(selectedMinute));
+				var model:Model = Model.getInstance();
+				model.startDate = date;
+				trace("Start date set: " + date);
+				
+				model.fromStationIndex = fromStation;
+				model.toStationIndex = toStation;
+				trace("Route set: " + fromStation + " to " + toStation + " | " + stations[fromStation] + " to " + stations[toStation]);
+				
+				ApplicationController.SINGLETON.hideModal();
+				ApplicationController.SINGLETON.startTracking();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label fontSize="15" color="white" text="Customize your trip:" left="10" top="10"/>
+	
+	<mx:DateChooser id="datePicker" horizontalCenter="0" top="45" width="350" height="150" buttonMode="true"
+		change="onDateSelected(event);"/>
+		
+	<mx:HBox horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		horizontalCenter="0" top="205" verticalAlign="middle"
+		width="350" height="35" horizontalGap="5">
+		
+		<mx:Label text="Hour: " fontSize="12" color="white"/>
+		<mx:ComboBox id="comboHour" width="75" buttonMode="true" dataProvider="{hours}" 
+			change="onHourSelected(event);"/>
+		
+		<mx:Label text="Minute: " fontSize="12" color="white"/>
+		<mx:ComboBox id="comboMinute" width="75" buttonMode="true" dataProvider="{minutes}" 
+			change="onMinuteSelected(event);"/>
+		
+	</mx:HBox>
+	
+	<mx:HBox horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		horizontalCenter="0" top="235" verticalAlign="middle"
+		width="350" height="35" horizontalGap="5">
+		
+		<mx:Label text="From: " fontSize="12" color="white"/>
+		<mx:ComboBox id="comboFrom" width="125" buttonMode="true" dataProvider="{stations}" 
+			change="onFromSelected(event);"/>
+		
+		<mx:Label text="To: " fontSize="12" color="white"/>
+		<mx:ComboBox id="comboTo" width="125" buttonMode="true" dataProvider="{stations}" 
+			change="onToSelected(event);"/>
+		
+	</mx:HBox>
+	
+	<mx:HBox horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		horizontalAlign="center" width="100%" bottom="10">
+		<mx:Button label="Done!" click="choose();" buttonMode="true" width="90%"/> 
+	</mx:HBox>
+	
+	<mx:Label id="closeButton" text="X" top="5" right="2" buttonMode="true" fontSize="10" color="white"
+		click="ApplicationController.SINGLETON.hideModal();"/>
+	
+</mx:Canvas>

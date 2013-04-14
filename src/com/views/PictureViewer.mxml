@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	backgroundAlpha="0.85" backgroundColor="black" width="350" height="200"
+	cornerRadius="5" borderThickness="0" borderStyle="solid" mouseChildren="false" mouseEnabled="false"
+	creationComplete="init();">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import com.models.CoordModel;
+			import com.Constants;
+			import caurina.transitions.Tweener;
+			
+			[Bindable]
+			public var coordModel:CoordModel;
+			
+			private var currentIndex:int = 0;
+			
+			private var timer:Timer;
+			
+			private function init():void
+			{
+				timer = new Timer(Constants.PICTURE_VIEWER_TIME_INTERVAL);
+				timer.addEventListener(TimerEvent.TIMER, nextImage);
+			}
+			
+			public function show(coordModel:CoordModel):void
+			{
+				this.coordModel = coordModel;
+				currentIndex = 0;
+				
+				locationName.text = coordModel.name;
+				
+				if(coordModel.pictures.length > 0){
+					timer.start();
+					loadImage();
+				}
+				else{
+					photo.source = "";
+					caption.text = "> No picture available";
+				}
+			}
+			
+			public function hide():void
+			{
+				timer.stop();
+			}
+			
+			private function loadImage():void
+			{
+				photo.source = "";
+				var loader:Loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function():void{trace("Photo load error.");});
+				loader.load(new URLRequest(coordModel.pictures[currentIndex].url));
+				
+				Tweener.removeTweens(photo);
+				Tweener.addTween(photo, {alpha: 0, time: 0.25, transition: 'linear'});
+			}
+			
+			private function nextImage(e:TimerEvent):void
+			{
+				if(coordModel.pictures.length > 1){
+					currentIndex++;
+					if(currentIndex > coordModel.pictures.length-1){
+						currentIndex = 0;
+					}
+					loadImage();
+				}
+			}
+			
+			public function next():void
+			{
+				timer.stop();
+				var e:TimerEvent = new TimerEvent(TimerEvent.TIMER);
+				nextImage(e);
+				timer.start();
+			}
+			
+			private function onImageLoaded(e:Event):void
+			{
+				var bitmap:Bitmap = e.currentTarget.content as Bitmap;
+				bitmap.smoothing = true;
+				photo.source = bitmap;
+				
+				var factor:Number = Constants.PICTURE_VIEWER_IMAGE_HEIGHT / bitmap.height;
+				photo.scaleX = photo.scaleY = factor;
+
+				if(coordModel.pictures[currentIndex].caption.length > 0){
+					caption.text = "> " + coordModel.pictures[currentIndex].caption;
+				}
+				else{
+					caption.text = "";
+				}
+				
+				Tweener.removeTweens(photo);
+				Tweener.addTween(photo, {alpha: 1, time: 0.25, transition: 'linear'});
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label id="locationName" text="Location Name" color="white" fontSize="15" top="5"
+		width="330" horizontalCenter="0" truncateToFit="true"/>
+	
+	<mx:Image id="photo" horizontalCenter="0" top="35"/>
+	
+	<mx:Text id="caption" text="Caption" color="white" fontSize="10" bottom="5"
+		width="330" height="20" horizontalCenter="0" truncateToFit="true"/>
+	
+</mx:Canvas>

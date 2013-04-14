@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import com.controllers.ApplicationController;
+			
+			[Bindable]
+			public var timeRemaining:String = "Time remaining...";
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas width="100%" height="50" backgroundColor="black" bottom="0" alpha="0.8"
+		horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
+	
+	<mx:Label bottom="10" left="10" fontSize="15" text="{timeRemaining}" color="white"/>
+	
+	<mx:HBox horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		horizontalGap="5" bottom="10" right="10">
+		
+		<mx:Button label="Zoom In" buttonMode="true" click="ApplicationController.SINGLETON.zoomIn();" />
+		<mx:Button label="Zoom Out" buttonMode="true" click="ApplicationController.SINGLETON.zoomOut();" />
+		<mx:Button label="Reset" buttonMode="true" click="ApplicationController.SINGLETON.resetZoom();" />
+		<mx:Button label="Options" buttonMode="true" click="ApplicationController.SINGLETON.showDatePicker();" />
+		
+	</mx:HBox>
+	
+</mx:Canvas>

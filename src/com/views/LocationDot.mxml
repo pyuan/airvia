@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="15" height="15"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	cornerRadius="10" borderStyle="solid" borderThickness="0"
+	backgroundColor="0xffd800" buttonMode="true"
+	mouseOver="mouseOverHandler();"
+	mouseOut="mouseOutHandler();"
+	click="clickHandler();">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import com.models.CoordModel;
+			import com.controllers.ApplicationController;
+			import com.Constants;
+		
+			[Bindable]
+			public var coordModel:CoordModel;
+			
+			private function mouseOverHandler():void
+			{
+				trace("Mouse over coordinate.");
+				ApplicationController.SINGLETON.showTooltip(this, Constants.TOOLTIP_MODE_LOCATION);
+				ApplicationController.SINGLETON.showPictureViewer(this);
+			}
+			
+			private function mouseOutHandler():void
+			{
+				trace("Mouse out coordinate.");
+				ApplicationController.SINGLETON.hideTooltip();
+				ApplicationController.SINGLETON.hidePictureViewer();
+			}
+			
+			private function clickHandler():void
+			{
+				trace("Mouse click coordinate.");
+				ApplicationController.SINGLETON.pictureViewerNext();
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:Canvas>
